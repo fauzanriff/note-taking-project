@@ -21,6 +21,8 @@ export default function About() {
             <li>Tailwind CSS for styling</li>
             <li>shadcn/ui for beautiful, accessible components</li>
             <li>React Router for navigation</li>
+            <li>Firebase for authentication, database, storage, and analytics</li>
+            <li>Environment variables for secure configuration</li>
           </ul>
         </CardContent>
         <CardFooter>
