@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Editor } from '@tiptap/react';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
+import { createRoot } from 'react-dom/client';
 
 interface CommandProps {
   title: string;
@@ -86,11 +87,11 @@ const CommandMenu: React.FC<{
 
   useEffect(() => {
     const navigationKeys = ['ArrowUp', 'ArrowDown', 'Enter'];
-    
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (navigationKeys.includes(e.key)) {
         e.preventDefault();
-        
+
         if (e.key === 'ArrowUp') {
           setSelectedIndex((selectedIndex + items.length - 1) % items.length);
         } else if (e.key === 'ArrowDown') {
@@ -100,9 +101,9 @@ const CommandMenu: React.FC<{
         }
       }
     };
-    
+
     document.addEventListener('keydown', onKeyDown);
-    
+
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
@@ -120,7 +121,7 @@ const CommandMenu: React.FC<{
   }, [selectedIndex]);
 
   return (
-    <div 
+    <div
       className="slash-command-list bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden overflow-y-auto max-h-[300px] w-[300px] border border-gray-200 dark:border-gray-700"
       ref={commandListRef}
     >
@@ -195,7 +196,7 @@ export const SlashCommands: React.FC<SlashCommandsProps> = ({ editor }) => {
       const { state } = editor;
       const { selection } = state;
       const { $from } = selection;
-      
+
       editor
         .chain()
         .focus()
@@ -204,7 +205,7 @@ export const SlashCommands: React.FC<SlashCommandsProps> = ({ editor }) => {
 
       // Execute the command
       item.action(editor);
-      
+
       // Hide the menu
       setShowMenu(false);
     },
@@ -241,7 +242,7 @@ export const SlashCommands: React.FC<SlashCommandsProps> = ({ editor }) => {
 
     if (!tippyInstance.current) {
       const menuElement = document.createElement('div');
-      
+
       tippyInstance.current = tippy(editorElement, {
         getReferenceClientRect: () => ({
           width: 0,
@@ -265,10 +266,9 @@ export const SlashCommands: React.FC<SlashCommandsProps> = ({ editor }) => {
       // Render the command menu into the tippy content
       const root = document.createElement('div');
       menuElement.appendChild(root);
-      
-      // Use ReactDOM to render the component
-      const ReactDOM = require('react-dom/client');
-      const reactRoot = ReactDOM.createRoot(root);
+
+      // Use createRoot to render the component
+      const reactRoot = createRoot(root);
       reactRoot.render(<CommandMenu items={commands} command={handleCommand} />);
     } else {
       tippyInstance.current.setProps({
