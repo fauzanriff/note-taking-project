@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { useFirebase } from '@/contexts/FirebaseContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,18 +11,22 @@ import {
 } from '@/components/ui/card';
 
 export default function AuthStatus() {
-  const { currentUser, loading } = useFirebase();
+  const { currentUser, loading, signIn, signUp, signOut } = useFirebase();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setError('');
-      await signInWithEmailAndPassword(auth, email, password);
+      setIsLoading(true);
+      await signIn(email, password);
     } catch (err) {
       setError('Failed to sign in: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -32,17 +34,23 @@ export default function AuthStatus() {
     e.preventDefault();
     try {
       setError('');
-      await createUserWithEmailAndPassword(auth, email, password);
+      setIsLoading(true);
+      await signUp(email, password);
     } catch (err) {
       setError('Failed to create account: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      setIsLoading(true);
+      await signOut();
     } catch (err) {
       setError('Failed to sign out: ' + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,8 +70,12 @@ export default function AuthStatus() {
         {currentUser ? (
           <div className="space-y-4">
             <p>Signed in as: {currentUser.email}</p>
-            <Button onClick={handleSignOut} variant="destructive">
-              Sign Out
+            <Button
+              onClick={handleSignOut}
+              variant="destructive"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing Out...' : 'Sign Out'}
             </Button>
           </div>
         ) : (
@@ -96,11 +108,22 @@ export default function AuthStatus() {
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
             <div className="flex space-x-2">
-              <Button type="submit" onClick={handleSignIn} className="flex-1">
-                Sign In
+              <Button
+                type="submit"
+                onClick={handleSignIn}
+                className="flex-1"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Signing In...' : 'Sign In'}
               </Button>
-              <Button type="button" onClick={handleSignUp} variant="outline" className="flex-1">
-                Sign Up
+              <Button
+                type="button"
+                onClick={handleSignUp}
+                variant="outline"
+                className="flex-1"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Signing Up...' : 'Sign Up'}
               </Button>
             </div>
           </form>
