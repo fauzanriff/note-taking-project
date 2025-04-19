@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '@/contexts/FirebaseContext';
-import { collection, query, where, orderBy, onSnapshot, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,6 +38,7 @@ export default function Notes() {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const notesList: Note[] = [];
+      console.log({ snapshot })
       snapshot.forEach((doc) => {
         const data = doc.data() as Omit<Note, 'id'>;
         notesList.push({

@@ -6,6 +6,7 @@ import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Trash2, Save } from 'lucide-react';
+import TiptapEditor from '@/components/editor/TiptapEditor';
 
 interface Note {
   id: string;
@@ -24,7 +25,7 @@ export default function NoteDetail() {
   const [lastEdit, setLastEdit] = useState<number | null>(null);
   const [isSaved, setIsSaved] = useState(true);
   const titleRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  // No longer need contentRef as we're using Tiptap
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { currentUser } = useFirebase();
   const navigate = useNavigate();
@@ -43,15 +44,19 @@ export default function NoteDetail() {
   };
 
   // Handle content changes
-  const handleContentChange = () => {
-    if (!note || !contentRef.current) return;
-
-    const content = contentRef.current.innerHTML || '';
+  const handleContentChange = (content: string) => {
+    if (!note) return;
 
     // Only update if the content has changed
     if (content !== note.content) {
       setLastEdit(Date.now());
       setIsSaved(false);
+
+      // Update the note state with the new content
+      setNote({
+        ...note,
+        content
+      });
     }
   };
 
@@ -61,14 +66,14 @@ export default function NoteDetail() {
 
     try {
       setSaving(true);
-      // Make sure we get the content from the refs
-      if (!titleRef.current || !contentRef.current) {
-        console.error('Title or content ref is null');
+      // Make sure we get the title from the ref
+      if (!titleRef.current) {
+        console.error('Title ref is null');
         return;
       }
 
       const title = titleRef.current.textContent || 'Untitled Note';
-      const content = contentRef.current.innerHTML || '';
+      const content = note.content || '';
 
       console.log('Saving note:', { title, content });
 
@@ -81,7 +86,6 @@ export default function NoteDetail() {
       setNote({
         ...note,
         title,
-        content,
         updatedAt: Timestamp.now(),
       });
 
@@ -144,15 +148,12 @@ export default function NoteDetail() {
     fetchNote();
   }, [noteId, currentUser, navigate]);
 
-  // Set up the content and title after the note is loaded
+  // Set up the title after the note is loaded
   useEffect(() => {
-    if (note && titleRef.current && contentRef.current) {
-      // Only set the content if the refs are not focused to avoid cursor jumping
+    if (note && titleRef.current) {
+      // Only set the title if the ref is not focused to avoid cursor jumping
       if (document.activeElement !== titleRef.current) {
         titleRef.current.textContent = note.title || 'Untitled Note';
-      }
-      if (document.activeElement !== contentRef.current) {
-        contentRef.current.innerHTML = note.content || '';
       }
     }
   }, [note]);
@@ -238,13 +239,10 @@ export default function NoteDetail() {
             onInput={handleTitleChange}
             onBlur={handleTitleChange}
           />
-          <div
-            ref={contentRef}
-            contentEditable={true}
-            suppressContentEditableWarning={true}
-            className="prose prose-sm max-w-none outline-none min-h-[300px] p-2 cursor-text hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded"
-            onInput={handleContentChange}
-            onBlur={handleContentChange}
+          <TiptapEditor
+            content={note.content || ''}
+            onChange={handleContentChange}
+            placeholder="Start writing your note here..."
           />
         </CardContent>
       </Card>
