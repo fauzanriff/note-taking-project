@@ -118,9 +118,41 @@ export default function NoteDetail() {
     };
   }, [lastEdit, isSaved, note, saveNote]);
 
+  // Function to save cursor position
+  const saveCaretPosition = (element: HTMLElement) => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      if (element.contains(range.commonAncestorContainer)) {
+        return {
+          range: range.cloneRange(),
+          selection: selection
+        };
+      }
+    }
+    return null;
+  };
+
+  // Function to restore cursor position
+  const restoreCaretPosition = (savedPosition: { range: Range, selection: Selection } | null) => {
+    if (savedPosition) {
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(savedPosition.range);
+      }
+    }
+  };
+
   // Handle content changes
-  const handleContentChange = () => {
+  const handleContentChange = (e: React.FormEvent<HTMLDivElement>) => {
     if (!note) return;
+
+    // Get the element that triggered the event
+    const element = e.currentTarget;
+
+    // Save the current cursor position
+    const savedCaretPosition = saveCaretPosition(element);
 
     // Get current values from the refs
     const currentTitle = titleRef.current?.innerText || 'Untitled Note';
@@ -136,6 +168,11 @@ export default function NoteDetail() {
     // Mark as unsaved and set last edit time for auto-save
     setLastEdit(Date.now());
     setIsSaved(false);
+
+    // Use setTimeout to restore the cursor position after React has updated the DOM
+    setTimeout(() => {
+      restoreCaretPosition(savedCaretPosition);
+    }, 0);
   };
 
   // Delete note
@@ -216,8 +253,8 @@ export default function NoteDetail() {
             contentEditable="true"
             suppressContentEditableWarning={true}
             className="text-3xl font-bold mb-4 outline-none border-b border-border pb-2 focus:border-primary cursor-text p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            onInput={handleContentChange}
-            onBlur={handleContentChange}
+            onInput={(e) => handleContentChange(e)}
+            onBlur={(e) => handleContentChange(e)}
             dangerouslySetInnerHTML={{ __html: note.title || 'Untitled Note' }}
           />
           <div
@@ -225,8 +262,8 @@ export default function NoteDetail() {
             contentEditable="true"
             suppressContentEditableWarning={true}
             className="prose prose-sm max-w-none outline-none min-h-[300px] p-2 cursor-text hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded"
-            onInput={handleContentChange}
-            onBlur={handleContentChange}
+            onInput={(e) => handleContentChange(e)}
+            onBlur={(e) => handleContentChange(e)}
             dangerouslySetInnerHTML={{ __html: note.content || '' }}
           />
         </CardContent>
