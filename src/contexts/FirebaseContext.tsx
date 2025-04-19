@@ -9,7 +9,7 @@ import {
   updateProfile,
   UserCredential
 } from 'firebase/auth';
-import { auth, initializeAnalytics } from '@/lib/firebase';
+import { auth, initializeAnalytics } from '@/api/firebase';
 
 // Define the context type
 interface FirebaseContextType {
