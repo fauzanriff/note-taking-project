@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useFirebase } from '@/contexts/FirebaseContext';
 import { doc, getDoc, updateDoc, Timestamp, deleteDoc } from 'firebase/firestore';
@@ -29,6 +29,44 @@ export default function NoteDetail() {
   const { currentUser } = useFirebase();
   const navigate = useNavigate();
 
+  // Save note to Firestore
+  const saveNote = useCallback(async () => {
+    if (!noteId || !currentUser || !note) return;
+
+    try {
+      setSaving(true);
+      // Make sure we get the content from the refs
+      if (!titleRef.current || !contentRef.current) {
+        console.error('Title or content ref is null');
+        return;
+      }
+
+      const title = titleRef.current.innerText || 'Untitled Note';
+      const content = contentRef.current.innerHTML || '';
+
+      console.log('Saving note:', { title, content });
+
+      await updateDoc(doc(db, 'notes', noteId), {
+        title,
+        content,
+        updatedAt: Timestamp.now(),
+      });
+
+      setNote({
+        ...note,
+        title,
+        content,
+        updatedAt: Timestamp.now(),
+      });
+
+      setIsSaved(true);
+    } catch (error) {
+      console.error('Error saving note:', error);
+    } finally {
+      setSaving(false);
+    }
+  }, [noteId, currentUser, note]);
+
   // Fetch note data
   useEffect(() => {
     const fetchNote = async () => {
@@ -58,7 +96,7 @@ export default function NoteDetail() {
 
   // Auto-save functionality
   useEffect(() => {
-    if (lastEdit && !isSaved) {
+    if (lastEdit && !isSaved && note) {
       // Clear any existing timeout
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
@@ -68,6 +106,8 @@ export default function NoteDetail() {
       saveTimeoutRef.current = setTimeout(() => {
         saveNote();
       }, 5000);
+
+      console.log('Auto-save scheduled in 5 seconds');
     }
 
     // Cleanup function to clear the timeout
@@ -76,46 +116,24 @@ export default function NoteDetail() {
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, [lastEdit, isSaved]);
-
-  // Save note to Firestore
-  const saveNote = async () => {
-    if (!noteId || !currentUser || !note) return;
-
-    try {
-      setSaving(true);
-      // Make sure we get the content from the refs
-      if (!titleRef.current || !contentRef.current) {
-        console.error('Title or content ref is null');
-        return;
-      }
-
-      const title = titleRef.current.innerText || 'Untitled Note';
-      const content = contentRef.current.innerHTML || '';
-
-      await updateDoc(doc(db, 'notes', noteId), {
-        title,
-        content,
-        updatedAt: Timestamp.now(),
-      });
-
-      setNote({
-        ...note,
-        title,
-        content,
-        updatedAt: Timestamp.now(),
-      });
-
-      setIsSaved(true);
-    } catch (error) {
-      console.error('Error saving note:', error);
-    } finally {
-      setSaving(false);
-    }
-  };
+  }, [lastEdit, isSaved, note, saveNote]);
 
   // Handle content changes
   const handleContentChange = () => {
+    if (!note) return;
+
+    // Get current values from the refs
+    const currentTitle = titleRef.current?.innerText || 'Untitled Note';
+    const currentContent = contentRef.current?.innerHTML || '';
+
+    // Update the note state immediately to reflect changes in the UI
+    setNote({
+      ...note,
+      title: currentTitle,
+      content: currentContent
+    });
+
+    // Mark as unsaved and set last edit time for auto-save
     setLastEdit(Date.now());
     setIsSaved(false);
   };
