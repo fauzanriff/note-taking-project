@@ -1,9 +1,9 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
-import { ReactRenderer } from '@tiptap/react';
 import tippy, { Instance as TippyInstance } from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import { CustomReactRenderer } from './CustomReactRenderer';
 
 interface CommandItem {
   title: string;
@@ -33,11 +33,11 @@ const CommandList = ({ items, command }: CommandListProps) => {
 
   useEffect(() => {
     const navigationKeys = ['ArrowUp', 'ArrowDown', 'Enter'];
-    
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (navigationKeys.includes(e.key)) {
         e.preventDefault();
-        
+
         if (e.key === 'ArrowUp') {
           setSelectedIndex((selectedIndex + items.length - 1) % items.length);
         } else if (e.key === 'ArrowDown') {
@@ -47,9 +47,9 @@ const CommandList = ({ items, command }: CommandListProps) => {
         }
       }
     };
-    
+
     document.addEventListener('keydown', onKeyDown);
-    
+
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
@@ -67,7 +67,7 @@ const CommandList = ({ items, command }: CommandListProps) => {
   }, [selectedIndex]);
 
   return (
-    <div 
+    <div
       className="slash-command-list bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden overflow-y-auto max-h-[300px] w-[300px] border border-gray-200 dark:border-gray-700"
       ref={commandListRef}
     >
@@ -103,29 +103,29 @@ export const SlashCommand = Extension.create({
   name: 'slashCommand',
 
   addProseMirrorPlugins() {
-    let component: ReactRenderer | null = null;
+    let component: CustomReactRenderer | null = null;
     let popup: TippyInstance | null = null;
 
     return [
       new Plugin({
         key: new PluginKey('slashCommand'),
-        
+
         view() {
           return {
             update: (view, prevState) => {
               const { state } = view;
               const { selection } = state;
               const { $from, empty } = selection;
-              
+
               // Close the popup if selection changes or is not empty
               if (!empty) {
                 popup?.hide();
                 return;
               }
-              
+
               // Get the current line of text before the cursor
               const currentLineText = $from.nodeBefore?.textContent || '';
-              
+
               // Check if the line starts with '/'
               if (currentLineText === '/') {
                 // Define the commands
@@ -259,19 +259,16 @@ export const SlashCommand = Extension.create({
                     },
                   },
                 ];
-                
+
                 const editor = this.editor;
-                
+
                 if (!component) {
-                  component = new ReactRenderer(CommandList, {
-                    props: {
-                      items,
-                      command: (item: CommandItem) => {
-                        item.command({ editor });
-                        popup?.hide();
-                      },
+                  component = new CustomReactRenderer(CommandList, {
+                    items,
+                    command: (item: CommandItem) => {
+                      item.command({ editor });
+                      popup?.hide();
                     },
-                    editor: this.editor,
                   });
                 } else {
                   component.updateProps({
@@ -282,15 +279,15 @@ export const SlashCommand = Extension.create({
                     },
                   });
                 }
-                
+
                 const { view } = this.editor;
                 const { state } = view;
                 const { selection } = state;
                 const { $from } = selection;
-                
+
                 const coords = view.coordsAtPos($from.pos);
                 const dom = view.dom;
-                
+
                 if (!popup) {
                   popup = tippy(dom, {
                     getReferenceClientRect: () => ({
@@ -325,14 +322,14 @@ export const SlashCommand = Extension.create({
                       toJSON: () => ({}),
                     }),
                   });
-                  
+
                   popup.show();
                 }
               } else {
                 popup?.hide();
               }
             },
-            
+
             destroy: () => {
               popup?.destroy();
               component?.destroy();
