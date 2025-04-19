@@ -2,8 +2,6 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
 import './TiptapEditor.css';
-import 'tippy.js/dist/tippy.css';
-import SlashCommands from './SlashCommands';
 
 interface TiptapEditorProps {
   content: string;
@@ -51,7 +49,6 @@ export default function TiptapEditor({
           {placeholder}
         </div>
       )}
-      {editor && <SlashCommands editor={editor} />}
     </div>
   );
 }
