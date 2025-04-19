@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFirebase } from '@/contexts/FirebaseContext';
-import { collection, query, orderBy, onSnapshot, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, addDoc, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,7 +31,7 @@ export default function Notes() {
     const q = query(
       notesRef,
       // Filter notes by the current user
-      // where('userId', '==', currentUser.uid),
+      where('userId', '==', currentUser.uid),
       // Order by updatedAt in descending order (newest first)
       orderBy('updatedAt', 'desc')
     );
@@ -122,8 +122,8 @@ export default function Notes() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {notes.map((note) => (
-            <Card 
-              key={note.id} 
+            <Card
+              key={note.id}
               className="cursor-pointer hover:shadow-md transition-shadow"
               onClick={() => navigate(`/notes/${note.id}`)}
             >

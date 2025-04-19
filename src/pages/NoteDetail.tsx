@@ -84,8 +84,14 @@ export default function NoteDetail() {
 
     try {
       setSaving(true);
-      const title = titleRef.current?.innerText || 'Untitled Note';
-      const content = contentRef.current?.innerHTML || '';
+      // Make sure we get the content from the refs
+      if (!titleRef.current || !contentRef.current) {
+        console.error('Title or content ref is null');
+        return;
+      }
+
+      const title = titleRef.current.innerText || 'Untitled Note';
+      const content = contentRef.current.innerHTML || '';
 
       await updateDoc(doc(db, 'notes', noteId), {
         title,
@@ -155,8 +161,8 @@ export default function NoteDetail() {
   return (
     <div className="container py-8 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           onClick={() => navigate('/notes')}
           className="flex items-center gap-2"
         >
@@ -164,17 +170,17 @@ export default function NoteDetail() {
           Back to Notes
         </Button>
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            onClick={saveNote} 
+          <Button
+            variant="outline"
+            onClick={saveNote}
             disabled={isSaved || saving}
             className="flex items-center gap-2"
           >
             <Save className="h-4 w-4" />
             {saving ? 'Saving...' : isSaved ? 'Saved' : 'Save'}
           </Button>
-          <Button 
-            variant="destructive" 
+          <Button
+            variant="destructive"
             onClick={deleteNote}
             className="flex items-center gap-2"
           >
@@ -186,18 +192,21 @@ export default function NoteDetail() {
 
       <Card className="mb-6">
         <CardContent className="p-6">
+          <div className="text-xs text-muted-foreground mb-4 italic">Click on title or content to edit</div>
           <div
             ref={titleRef}
-            contentEditable
-            className="text-3xl font-bold mb-4 outline-none border-b border-border pb-2 focus:border-primary"
+            contentEditable="true"
+            suppressContentEditableWarning={true}
+            className="text-3xl font-bold mb-4 outline-none border-b border-border pb-2 focus:border-primary cursor-text p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             onInput={handleContentChange}
             onBlur={handleContentChange}
             dangerouslySetInnerHTML={{ __html: note.title || 'Untitled Note' }}
           />
           <div
             ref={contentRef}
-            contentEditable
-            className="prose prose-sm max-w-none outline-none min-h-[300px]"
+            contentEditable="true"
+            suppressContentEditableWarning={true}
+            className="prose prose-sm max-w-none outline-none min-h-[300px] p-2 cursor-text hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded"
             onInput={handleContentChange}
             onBlur={handleContentChange}
             dangerouslySetInnerHTML={{ __html: note.content || '' }}
