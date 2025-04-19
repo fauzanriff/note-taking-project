@@ -44,6 +44,14 @@ export default function Navbar() {
           >
             About
           </NavLink>
+          <NavLink
+            to="/notes"
+            className={({ isActive }) =>
+              isActive ? "font-medium text-primary" : "font-medium text-muted-foreground hover:text-primary"
+            }
+          >
+            Notes
+          </NavLink>
           <Button variant="outline" size="sm" asChild>
             <a href="https://github.com/shadcn-ui/ui" target="_blank" rel="noreferrer">
               GitHub
