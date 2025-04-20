@@ -2,6 +2,8 @@
 
 A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase, organized with a feature-based folder structure.
 
+![React Firebase Starter Screenshot](src/assets/screenshot-app.png)
+
 ## Features
 
 - **React 19** with TypeScript
@@ -126,6 +128,17 @@ This organization makes it easier to:
 - Maintain and extend features independently
 - Reuse code within features without creating circular dependencies
 - Onboard new developers by providing clear boundaries
+
+## Screenshots
+
+### Main Application
+
+![React Firebase Starter Screenshot](src/assets/screenshot-app.png)
+
+The screenshot above shows the main application interface, featuring:
+- Clean, modern UI with Tailwind CSS and shadcn/ui components
+- Notes feature with rich text editing capabilities
+- Responsive design that works on all device sizes
 
 ## Key Features
 
