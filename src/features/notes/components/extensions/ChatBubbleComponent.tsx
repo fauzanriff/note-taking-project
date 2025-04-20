@@ -1,24 +1,13 @@
 import React from 'react';
-import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
+import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react';
 
-interface ChatBubbleComponentProps {
-  node: {
-    attrs: {
-      type: 'sent' | 'received';
-      sender: string;
-    };
-  };
-  updateAttributes: (attrs: Record<string, any>) => void;
-  selected: boolean;
-}
+export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
+  const { node, updateAttributes, selected } = props;
+  
+  // Extract attributes with defaults
+  const type = node.attrs.type || 'sent';
+  const sender = node.attrs.sender || '';
 
-export const ChatBubbleComponent: React.FC<ChatBubbleComponentProps> = ({
-  node: {
-    attrs: { type, sender },
-  },
-  updateAttributes,
-  selected,
-}) => {
   const toggleType = () => {
     updateAttributes({
       type: type === 'sent' ? 'received' : 'sent',
@@ -45,6 +34,7 @@ export const ChatBubbleComponent: React.FC<ChatBubbleComponentProps> = ({
             ? 'bg-primary text-primary-foreground rounded-tl-lg rounded-tr-lg rounded-bl-lg'
             : 'bg-muted text-muted-foreground rounded-tl-lg rounded-tr-lg rounded-br-lg'
         }`}
+        data-type={type}
       >
         {sender && (
           <div
@@ -58,7 +48,7 @@ export const ChatBubbleComponent: React.FC<ChatBubbleComponentProps> = ({
         <div className="chat-bubble-content p-4 pt-2">
           <NodeViewContent className="chat-bubble-editor" />
         </div>
-        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 hover:opacity-100 transition-opacity flex gap-2">
           <button
             type="button"
             onClick={toggleType}

@@ -19,13 +19,13 @@ declare module '@tiptap/core' {
 
 export const ChatBubble = Node.create<ChatBubbleOptions>({
   name: 'chatBubble',
-  
+
   group: 'block',
-  
+
   content: 'inline*',
-  
+
   defining: true,
-  
+
   addOptions() {
     return {
       HTMLAttributes: {
@@ -33,7 +33,7 @@ export const ChatBubble = Node.create<ChatBubbleOptions>({
       },
     };
   },
-  
+
   addAttributes() {
     return {
       type: {
@@ -56,23 +56,31 @@ export const ChatBubble = Node.create<ChatBubbleOptions>({
       },
     };
   },
-  
+
   parseHTML() {
     return [
       {
-        tag: 'div[data-type="chat-bubble"]',
+        tag: 'div[data-node-type="chatBubble"]',
       },
     ];
   },
-  
+
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
+    return [
+      'div',
+      mergeAttributes(
+        this.options.HTMLAttributes,
+        HTMLAttributes,
+        { 'data-node-type': 'chatBubble' }
+      ),
+      0
+    ];
   },
-  
+
   addNodeView() {
     return ReactNodeViewRenderer(ChatBubbleComponent);
   },
-  
+
   addCommands() {
     return {
       setChatBubble:
