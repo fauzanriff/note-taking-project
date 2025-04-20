@@ -48,7 +48,7 @@ export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
         <div className="chat-bubble-content p-4 pt-2">
           <NodeViewContent className="chat-bubble-editor" />
         </div>
-        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity flex gap-2 z-10">
+        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity flex gap-2 z-10 text-black">
           <button
             type="button"
             onClick={toggleType}

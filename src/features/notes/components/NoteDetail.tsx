@@ -234,7 +234,7 @@ export default function NoteDetail() {
             ref={titleRef}
             contentEditable={true}
             suppressContentEditableWarning={true}
-            className="text-3xl font-bold mb-4 outline-none border-b border-border pb-2 focus:border-primary cursor-text p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            className="text-3xl font-bold mb-4 outline-none border-b border-border pb-2 focus:border-primary cursor-text p-2 hover:border-primary dark:hover:border-primary transition-colors"
             onInput={handleTitleChange}
             onBlur={handleTitleChange}
           />

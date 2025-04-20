@@ -45,7 +45,7 @@
   width: 0;
   height: 0;
   border: 8px solid transparent;
-  border-left-color: hsl(var(--primary));
+  border-left-color: var(--primary);
   border-right: 0;
   border-bottom: 0;
   margin-right: 0;
@@ -59,17 +59,18 @@
   width: 0;
   height: 0;
   border: 8px solid transparent;
-  border-right-color: hsl(var(--muted));
+  border-right-color: var(--muted);
   border-left: 0;
   border-bottom: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   margin-left: 0;
 }
 
 /* Fix for dark mode */
 .dark .chat-bubble[data-type="sent"]::after {
-  border-left-color: hsl(var(--primary));
+  border-left-color: var(--primary);
 }
 
 .dark .chat-bubble[data-type="received"]::after {
-  border-right-color: hsl(var(--muted));
+  border-right-color: var(--muted);
 }

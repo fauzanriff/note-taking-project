@@ -27,7 +27,7 @@ export default function TiptapEditor({
     content,
     editorProps: {
       attributes: {
-        class: `prose prose-sm max-w-none outline-none min-h-[300px] p-2 cursor-text hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded ${className}`,
+        class: `prose prose-sm max-w-none outline-none min-h-[300px] p-2 cursor-text rounded ${className}`,
       },
     },
     onUpdate: ({ editor }) => {
