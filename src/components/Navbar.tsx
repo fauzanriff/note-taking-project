@@ -53,7 +53,7 @@ export default function Navbar() {
             Notes
           </NavLink>
           <Button variant="outline" size="sm" asChild>
-            <a href="https://github.com/shadcn-ui/ui" target="_blank" rel="noreferrer">
+            <a href="https://github.com/fauzanriff/react-firebase-starter" target="_blank" rel="noreferrer">
               GitHub
             </a>
           </Button>

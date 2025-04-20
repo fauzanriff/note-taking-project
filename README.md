@@ -1,6 +1,6 @@
-# React Starter Template
+# React Firebase Starter
 
-A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase.
+A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase, organized with a feature-based folder structure.
 
 ## Features
 
@@ -10,6 +10,8 @@ A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, 
 - **shadcn/ui** for beautiful, accessible components
 - **React Router** for navigation
 - **Firebase** for authentication, database, storage, and analytics
+- **Feature-based folder structure** for better organization and scalability
+- **Tiptap** rich text editor integration
 - Environment variables for secure configuration
 
 ## Getting Started
@@ -24,8 +26,8 @@ A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, 
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/yourusername/react-starter-template.git
-   cd react-starter-template
+   git clone https://github.com/fauzanriff/react-firebase-starter.git
+   cd react-firebase-starter
    ```
 
 2. Install dependencies
@@ -65,28 +67,40 @@ A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, 
 
 This template includes the following Firebase features:
 
-- **Authentication**: Sign up, sign in, and sign out functionality
+- **Authentication**: Sign up, sign in, and sign out functionality with password confirmation
 - **Firestore**: NoSQL database for storing and syncing data
 - **Storage**: File storage for user-generated content
 - **Analytics**: User behavior analytics
 
 ## Project Structure
 
+The project follows a feature-based folder structure for better organization and scalability:
+
 ```
 ├── public/              # Static assets
 ├── src/
-│   ├── assets/          # Images, fonts, etc.
-│   ├── components/      # Reusable components
-│   │   ├── auth/        # Authentication components
-│   │   ├── layout/      # Layout components
+│   ├── app/             # Core application logic
+│   │   ├── App.tsx      # Main App component
+│   │   └── main.tsx     # Entry point
+│   ├── features/        # Feature-specific logic and components
+│   │   ├── auth/        # Authentication feature
+│   │   │   ├── components/  # Components specific to auth
+│   │   │   └── index.ts     # Exports for auth feature
+│   │   ├── notes/       # Notes feature
+│   │   │   ├── components/  # Components specific to notes
+│   │   │   └── index.ts     # Exports for notes feature
+│   │   └── home/        # Home feature
+│   │       ├── components/  # Components specific to home
+│   │       └── index.ts     # Exports for home feature
+│   ├── components/      # Global shared components
 │   │   └── ui/          # UI components from shadcn/ui
-│   ├── contexts/        # React contexts
-│   ├── lib/             # Utility functions and libraries
+│   ├── api/             # API services and configurations
 │   │   └── firebase.ts  # Firebase configuration
-│   ├── pages/           # Page components
-│   ├── App.tsx          # Main App component
-│   ├── index.css        # Global styles
-│   └── main.tsx         # Entry point
+│   ├── contexts/        # React contexts
+│   ├── utils/           # Utility functions
+│   ├── hooks/           # Shared custom hooks
+│   ├── assets/          # Static assets (images, fonts, etc.)
+│   └── index.css        # Global styles
 ├── .env.example         # Example environment variables
 ├── .gitignore           # Git ignore file
 ├── components.json      # shadcn/ui configuration
@@ -97,6 +111,37 @@ This template includes the following Firebase features:
 ├── tsconfig.json        # TypeScript configuration
 └── vite.config.ts       # Vite configuration
 ```
+
+### Feature-Based Organization
+
+Each feature in the `/features` directory contains:
+
+- **components/**: UI components specific to the feature
+- **hooks/**: Custom hooks specific to the feature
+- **utils/**: Utility functions specific to the feature
+- **index.ts**: Exports the feature's public API
+
+This organization makes it easier to:
+- Understand the codebase by grouping related code together
+- Maintain and extend features independently
+- Reuse code within features without creating circular dependencies
+- Onboard new developers by providing clear boundaries
+
+## Key Features
+
+### Authentication
+
+- User sign-up with password confirmation
+- User sign-in
+- Protected routes
+- Authentication state management
+
+### Notes
+
+- Create, read, update, and delete notes
+- Rich text editing with Tiptap
+- Auto-save functionality
+- Real-time updates with Firestore
 
 ## Deployment
 
