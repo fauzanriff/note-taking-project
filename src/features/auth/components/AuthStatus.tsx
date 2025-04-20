@@ -14,8 +14,10 @@ export default function AuthStatus() {
   const { currentUser, loading, signIn, signUp, signOut } = useFirebase();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +36,19 @@ export default function AuthStatus() {
     e.preventDefault();
     try {
       setError('');
+
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+
+      // Check password length
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return;
+      }
+
       setIsLoading(true);
       await signUp(email, password);
     } catch (err) {
@@ -61,9 +76,19 @@ export default function AuthStatus() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>Authentication Status</CardTitle>
+        <CardTitle>
+          {currentUser
+            ? 'Authentication Status'
+            : (isSignUp ? 'Create an Account' : 'Sign In to Your Account')
+          }
+        </CardTitle>
         <CardDescription>
-          {currentUser ? 'You are currently signed in' : 'You are not signed in'}
+          {currentUser
+            ? 'You are currently signed in'
+            : (isSignUp
+                ? 'Please fill in your details to create a new account'
+                : 'Enter your credentials to access your account')
+          }
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -79,54 +104,84 @@ export default function AuthStatus() {
             </Button>
           </div>
         ) : (
-          <form className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                required
-              />
-            </div>
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <div className="flex space-x-2">
+          <div className="space-y-4">
+            <div className="flex justify-center space-x-4 mb-4">
               <Button
-                type="submit"
-                onClick={handleSignIn}
+                type="button"
+                variant={!isSignUp ? "default" : "outline"}
+                onClick={() => setIsSignUp(false)}
                 className="flex-1"
-                disabled={isLoading}
               >
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                Sign In
               </Button>
               <Button
                 type="button"
-                onClick={handleSignUp}
-                variant="outline"
+                variant={isSignUp ? "default" : "outline"}
+                onClick={() => setIsSignUp(true)}
                 className="flex-1"
-                disabled={isLoading}
               >
-                {isLoading ? 'Signing Up...' : 'Sign Up'}
+                Sign Up
               </Button>
             </div>
-          </form>
+
+            <form className="space-y-4" onSubmit={isSignUp ? handleSignUp : handleSignIn}>
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+
+              {isSignUp && (
+                <div className="space-y-2">
+                  <label htmlFor="confirmPassword" className="text-sm font-medium">
+                    Confirm Password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+              )}
+
+              {error && <p className="text-destructive text-sm">{error}</p>}
+
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isLoading}
+              >
+                {isLoading
+                  ? (isSignUp ? 'Signing Up...' : 'Signing In...')
+                  : (isSignUp ? 'Sign Up' : 'Sign In')
+                }
+              </Button>
+            </form>
+          </div>
         )}
       </CardContent>
       <CardFooter className="text-xs text-muted-foreground">
