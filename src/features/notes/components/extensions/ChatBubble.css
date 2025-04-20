@@ -1,0 +1,66 @@
+.chat-bubble-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.chat-bubble {
+  position: relative;
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.chat-bubble:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.chat-bubble-wrapper:hover .chat-bubble-controls {
+  opacity: 1;
+}
+
+.chat-bubble-controls {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.chat-bubble-sender {
+  font-weight: 600;
+}
+
+.chat-bubble-content p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-bubble-content p:first-child {
+  margin-top: 0;
+}
+
+/* Add a little triangle to the chat bubble */
+.chat-bubble[data-type="sent"]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-left-color: hsl(var(--primary));
+  border-right: 0;
+  border-bottom: 0;
+  margin-right: 0;
+}
+
+.chat-bubble[data-type="received"]::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-right-color: hsl(var(--muted));
+  border-left: 0;
+  border-bottom: 0;
+  margin-left: 0;
+}

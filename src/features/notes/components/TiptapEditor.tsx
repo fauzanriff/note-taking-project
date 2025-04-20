@@ -2,6 +2,9 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';
 import './TiptapEditor.css';
+import ChatBubble from './extensions/ChatBubbleNode';
+import './extensions/ChatBubble.css';
+import { TiptapToolbar } from './TiptapToolbar';
 
 interface TiptapEditorProps {
   content: string;
@@ -19,6 +22,7 @@ export default function TiptapEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
+      ChatBubble,
     ],
     content,
     editorProps: {
@@ -43,12 +47,15 @@ export default function TiptapEditor({
 
   return (
     <div className="tiptap-editor">
-      <EditorContent editor={editor} />
-      {editor?.isEmpty && (
-        <div className="absolute top-0 left-0 p-2 text-gray-400 pointer-events-none">
-          {placeholder}
-        </div>
-      )}
+      <TiptapToolbar editor={editor} />
+      <div className="relative">
+        <EditorContent editor={editor} />
+        {editor?.isEmpty && (
+          <div className="absolute top-0 left-0 p-2 text-gray-400 pointer-events-none">
+            {placeholder}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
