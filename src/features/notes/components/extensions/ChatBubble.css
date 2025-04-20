@@ -64,3 +64,12 @@
   border-bottom: 0;
   margin-left: 0;
 }
+
+/* Fix for dark mode */
+.dark .chat-bubble[data-type="sent"]::after {
+  border-left-color: hsl(var(--primary));
+}
+
+.dark .chat-bubble[data-type="received"]::after {
+  border-right-color: hsl(var(--muted));
+}

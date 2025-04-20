@@ -3,7 +3,7 @@ import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react';
 
 export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
   const { node, updateAttributes, selected } = props;
-  
+
   // Extract attributes with defaults
   const type = node.attrs.type || 'sent';
   const sender = node.attrs.sender || '';
@@ -22,7 +22,7 @@ export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
 
   return (
     <NodeViewWrapper
-      className={`chat-bubble-wrapper my-4 ${
+      className={`chat-bubble-wrapper my-4 group ${
         type === 'sent' ? 'flex justify-end' : 'flex justify-start'
       }`}
     >
@@ -48,7 +48,7 @@ export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
         <div className="chat-bubble-content p-4 pt-2">
           <NodeViewContent className="chat-bubble-editor" />
         </div>
-        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 hover:opacity-100 transition-opacity flex gap-2">
+        <div className="chat-bubble-controls absolute -top-8 right-0 opacity-0 group-hover:opacity-100 hover:opacity-100 transition-opacity flex gap-2 z-10">
           <button
             type="button"
             onClick={toggleType}
