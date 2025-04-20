@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/api/firebase';
 import {
@@ -16,6 +16,7 @@ import { useFirebase } from '@/contexts/FirebaseContext';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -34,6 +35,22 @@ export default function Login() {
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Validate passwords match for sign up
+    if (isSignUp) {
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        setError('Passwords do not match');
+        return;
+      }
+
+      // Check password length (Firebase requires at least 6 characters)
+      if (password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
@@ -104,6 +121,24 @@ export default function Login() {
                   required
                 />
               </div>
+
+              {isSignUp && (
+                <div className="space-y-2">
+                  <label htmlFor="confirmPassword" className="text-sm font-medium">
+                    Confirm Password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+              )}
+
               {error && <p className="text-destructive text-sm">{error}</p>}
               <Button
                 type="submit"
