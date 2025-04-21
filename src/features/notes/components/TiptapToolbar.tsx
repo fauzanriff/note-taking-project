@@ -52,7 +52,7 @@ export const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
   };
 
   return (
-    <div className="tiptap-toolbar flex flex-wrap gap-1 p-1 mb-2 border rounded-md bg-background">
+    <div className="tiptap-toolbar flex flex-wrap gap-1 p-1 mb-2 border rounded-md bg-background overflow-x-auto">
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -147,7 +147,7 @@ export const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
           <MessageSquare className="h-4 w-4" />
         </button>
         {isChatMenuOpen && (
-          <div className="absolute left-0 top-full mt-1 bg-background border rounded shadow-lg z-10 w-40">
+          <div className="absolute left-0 sm:left-auto right-0 sm:right-auto top-full mt-1 bg-background border rounded shadow-lg z-10 w-40">
             <button
               type="button"
               onClick={() => addChatBubble('sent')}

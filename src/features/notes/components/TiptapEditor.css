@@ -3,13 +3,22 @@
 }
 
 .tiptap-editor .ProseMirror {
-  min-height: 300px;
+  min-height: 200px;
   padding: 0.5rem;
   border-radius: 0.375rem;
   outline: none;
   cursor: text;
   border: 1px solid transparent;
   transition: border-color 0.2s;
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+@media (min-width: 640px) {
+  .tiptap-editor .ProseMirror {
+    min-height: 300px;
+  }
 }
 
 .tiptap-editor .ProseMirror:hover {
@@ -46,15 +55,29 @@
 }
 
 .tiptap-editor .ProseMirror h1 {
-  font-size: 1.875rem;
-}
-
-.tiptap-editor .ProseMirror h2 {
   font-size: 1.5rem;
 }
 
-.tiptap-editor .ProseMirror h3 {
+.tiptap-editor .ProseMirror h2 {
   font-size: 1.25rem;
+}
+
+.tiptap-editor .ProseMirror h3 {
+  font-size: 1.125rem;
+}
+
+@media (min-width: 640px) {
+  .tiptap-editor .ProseMirror h1 {
+    font-size: 1.875rem;
+  }
+
+  .tiptap-editor .ProseMirror h2 {
+    font-size: 1.5rem;
+  }
+
+  .tiptap-editor .ProseMirror h3 {
+    font-size: 1.25rem;
+  }
 }
 
 .tiptap-editor .ProseMirror ul,
