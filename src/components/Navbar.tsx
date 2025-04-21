@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Button } from '@/components'
 import { useFirebase } from '@/contexts/FirebaseContext'
-import { Menu, X, User, LogOut, Code } from 'lucide-react'
+import { Menu, X, User, LogOut, Github } from 'lucide-react'
 
 export default function Navbar() {
   const { currentUser, signOut } = useFirebase();
@@ -103,12 +103,15 @@ export default function Navbar() {
             >
               Notes
             </NavLink>
-            <Button variant="outline" size="sm" asChild>
-              <a href="https://github.com/fauzanriff/react-firebase-starter" target="_blank" rel="noreferrer">
-                <Code className="h-4 w-4 mr-2" />
-                GitHub
-              </a>
-            </Button>
+            <a
+              href="https://github.com/fauzanriff/react-firebase-starter"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center h-9 w-9 rounded-full border border-muted hover:border-primary transition-colors"
+              aria-label="GitHub repository"
+            >
+              <Github className="h-5 w-5" />
+            </a>
 
             {currentUser ? (
               <div className="relative" ref={profileMenuRef}>
@@ -186,7 +189,7 @@ export default function Navbar() {
                 className="flex items-center font-medium text-muted-foreground hover:text-primary"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Code className="h-4 w-4 mr-2" />
+                <Github className="h-4 w-4 mr-2" />
                 GitHub
               </a>
 
