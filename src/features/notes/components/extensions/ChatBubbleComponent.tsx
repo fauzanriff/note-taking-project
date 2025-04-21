@@ -52,7 +52,7 @@ export const ChatBubbleComponent: React.FC<NodeViewProps> = (props) => {
           <button
             type="button"
             onClick={toggleType}
-            className="p-1 bg-background border rounded text-xs"
+            className="p-1 bg-background border rounded text-xs whitespace-nowrap"
             title={`Switch to ${type === 'sent' ? 'received' : 'sent'} message`}
           >
             {type === 'sent' ? '← Received' : 'Sent →'}
