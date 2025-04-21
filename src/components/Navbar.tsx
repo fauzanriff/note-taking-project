@@ -59,7 +59,7 @@ export default function Navbar() {
     <header className="border-b">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-xl font-bold">React Starter</span>
+          <span className="text-xl font-bold">NotesThery</span>
         </Link>
 
         {/* Mobile menu button */}
@@ -104,7 +104,7 @@ export default function Navbar() {
               Notes
             </NavLink>
             <a
-              href="https://github.com/fauzanriff/react-firebase-starter"
+              href="https://github.com/fauzanriff/note-taking-project"
               target="_blank"
               rel="noreferrer"
               className="flex items-center justify-center h-9 w-9 rounded-full border border-muted hover:border-primary transition-colors"
@@ -183,7 +183,7 @@ export default function Navbar() {
                 Notes
               </NavLink>
               <a
-                href="https://github.com/fauzanriff/react-firebase-starter"
+                href="https://github.com/fauzanriff/note-taking-project"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center font-medium text-muted-foreground hover:text-primary"

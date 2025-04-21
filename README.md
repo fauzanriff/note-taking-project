@@ -1,8 +1,8 @@
-# React Firebase Starter
+# NotesThery Note Taking Project
 
-A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase, organized with a feature-based folder structure.
+A modern note-taking application built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase, featuring rich text editing capabilities and real-time synchronization.
 
-![React Firebase Starter Screenshot](src/assets/screenshot-app.png)
+![NotesThery Screenshot](src/assets/screenshot-app.png)
 
 ## Features
 
@@ -28,8 +28,8 @@ A modern React starter template with TypeScript, Vite, Tailwind CSS, shadcn/ui, 
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/fauzanriff/react-firebase-starter.git
-   cd react-firebase-starter
+   git clone https://github.com/fauzanriff/note-taking-project.git
+   cd note-taking-project
    ```
 
 2. Install dependencies
@@ -133,7 +133,7 @@ This organization makes it easier to:
 
 ### Main Application
 
-![React Firebase Starter Screenshot](src/assets/screenshot-app.png)
+![NotesThery Screenshot](src/assets/screenshot-app.png)
 
 The screenshot above shows the main application interface, featuring:
 - Clean, modern UI with Tailwind CSS and shadcn/ui components

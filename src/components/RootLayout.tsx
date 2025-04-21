@@ -10,7 +10,7 @@ export default function RootLayout() {
       </main>
       <footer className="border-t py-4 text-center text-sm text-muted-foreground">
         <div className="container px-4 sm:px-6 md:px-8">
-          <p>© {new Date().getFullYear()} React Starter. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} NotesThery. All rights reserved.</p>
         </div>
       </footer>
     </div>
