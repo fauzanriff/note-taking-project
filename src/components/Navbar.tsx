@@ -59,7 +59,7 @@ export default function Navbar() {
     <header className="border-b">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-xl font-bold">NotesThery</span>
+          <span className="text-xl font-bold">Notesthery</span>
         </Link>
 
         {/* Mobile menu button */}

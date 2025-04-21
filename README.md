@@ -1,8 +1,8 @@
-# NotesThery Note Taking Project
+# Notesthery Note Taking Project
 
 A modern note-taking application built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui, React Router, and Firebase, featuring rich text editing capabilities and real-time synchronization.
 
-![NotesThery Screenshot](src/assets/screenshot-app.png)
+![Notesthery Screenshot](src/assets/screenshot-app.png)
 
 ## Features
 
@@ -133,7 +133,7 @@ This organization makes it easier to:
 
 ### Main Application
 
-![NotesThery Screenshot](src/assets/screenshot-app.png)
+![Notesthery Screenshot](src/assets/screenshot-app.png)
 
 The screenshot above shows the main application interface, featuring:
 - Clean, modern UI with Tailwind CSS and shadcn/ui components

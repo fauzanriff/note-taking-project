@@ -51,7 +51,7 @@
   width: 0;
   height: 0;
   border: 6px solid transparent;
-  border-left-color: hsl(var(--primary));
+  border-left-color: var(--primary);
   border-right: 0;
   border-bottom: 0;
   margin-right: 0;
@@ -61,7 +61,7 @@
   .chat-bubble[data-type="sent"]::after {
     right: -8px;
     border: 8px solid transparent;
-    border-left-color: hsl(var(--primary));
+    border-left-color: var(--primary);
     border-right: 0;
     border-bottom: 0;
   }

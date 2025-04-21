@@ -52,7 +52,7 @@ export const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
   };
 
   return (
-    <div className="tiptap-toolbar flex flex-wrap gap-1 p-1 mb-2 border rounded-md bg-background overflow-x-auto">
+    <div className="tiptap-toolbar flex flex-wrap gap-1 p-1 mb-2 border rounded-md bg-background">
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
