@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Editor } from '@tiptap/react';
 import {
   Bold,
@@ -18,12 +18,37 @@ interface TiptapToolbarProps {
 }
 
 export const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
+  const [isChatMenuOpen, setIsChatMenuOpen] = useState(false);
+  const chatMenuRef = useRef<HTMLDivElement>(null);
+
+  // Handle click outside to close the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (chatMenuRef.current && !chatMenuRef.current.contains(event.target as Node)) {
+        setIsChatMenuOpen(false);
+      }
+    };
+
+    if (isChatMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isChatMenuOpen]);
+
   if (!editor) {
     return null;
   }
 
   const addChatBubble = (type: 'sent' | 'received') => {
     editor.chain().focus().setChatBubble({ type, sender: type === 'sent' ? 'You' : 'Friend' }).run();
+    setIsChatMenuOpen(false); // Close the menu after selection
+  };
+
+  const toggleChatMenu = () => {
+    setIsChatMenuOpen(!isChatMenuOpen);
   };
 
   return (
@@ -106,36 +131,39 @@ export const TiptapToolbar: React.FC<TiptapToolbarProps> = ({ editor }) => {
       >
         <Code className="h-4 w-4" />
       </button>
-      
+
       <div className="border-l mx-1"></div>
-      
+
       {/* Chat Bubble Buttons */}
-      <div className="relative group">
+      <div className="relative" ref={chatMenuRef}>
         <button
           type="button"
+          onClick={toggleChatMenu}
           className={`p-2 rounded hover:bg-muted ${
             editor.isActive('chatBubble') ? 'bg-muted' : ''
-          }`}
+          } ${isChatMenuOpen ? 'bg-muted' : ''}`}
           title="Chat Bubble"
         >
           <MessageSquare className="h-4 w-4" />
         </button>
-        <div className="absolute left-0 top-full mt-1 bg-background border rounded shadow-lg hidden group-hover:block z-10">
-          <button
-            type="button"
-            onClick={() => addChatBubble('sent')}
-            className="block w-full text-left px-3 py-2 hover:bg-muted"
-          >
-            Sent Message
-          </button>
-          <button
-            type="button"
-            onClick={() => addChatBubble('received')}
-            className="block w-full text-left px-3 py-2 hover:bg-muted"
-          >
-            Received Message
-          </button>
-        </div>
+        {isChatMenuOpen && (
+          <div className="absolute left-0 top-full mt-1 bg-background border rounded shadow-lg z-10 w-40">
+            <button
+              type="button"
+              onClick={() => addChatBubble('sent')}
+              className="block w-full text-left px-3 py-2 hover:bg-muted"
+            >
+              Sent Message
+            </button>
+            <button
+              type="button"
+              onClick={() => addChatBubble('received')}
+              className="block w-full text-left px-3 py-2 hover:bg-muted"
+            >
+              Received Message
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
